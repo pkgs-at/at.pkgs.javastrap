@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
+	<classpathentry exported="true" kind="lib" path="/build/dependancy/at.pkgs.logging-1.0.0.jar" sourcepath="/build/dependancy/sources/at.pkgs.logging-1.0.0-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="/build/dependancy/at.pkgs.logging.java-1.8.0-extension-1.0.0.jar" sourcepath="/build/dependancy/sources/at.pkgs.logging.java-1.8.0-extension-1.0.0-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="/build/dependancy/at.pkgs.logging.log4j-1.0.0.jar" sourcepath="/build/dependancy/sources/at.pkgs.logging.log4j-1.0.0-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="/build/dependancy/at.pkgs.sql.trifle-1.0.0.jar" sourcepath="/build/dependancy/sources/at.pkgs.sql.trifle-1.0.0-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="/build/dependancy/at.pkgs.template-1.0.0.jar" sourcepath="/build/dependancy/sources/at.pkgs.template-1.0.0-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="/build/dependancy/at.pkgs.web.http-1.0.0.jar" sourcepath="/build/dependancy/sources/at.pkgs.web.http-1.0.0-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="/build/dependancy/at.pkgs.web.page-1.0.0.jar" sourcepath="/build/dependancy/sources/at.pkgs.web.page-1.0.0-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="/build/dependancy/at.pkgs.web.trio-1.0.0.jar" sourcepath="/build/dependancy/sources/at.pkgs.web.trio-1.0.0-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="/build/dependancy/javax.servlet-api-3.0.1.jar" sourcepath="/build/dependancy/sources/javax.servlet-api-3.0.1-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="/build/dependancy/jul-to-slf4j-1.7.19.jar" sourcepath="/build/dependancy/sources/jul-to-slf4j-1.7.19-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="/build/dependancy/log4j-1.2-api-2.0.2.jar" sourcepath="/build/dependancy/sources/log4j-1.2-api-2.0.2-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="/build/dependancy/log4j-api-2.0.2.jar" sourcepath="/build/dependancy/sources/log4j-api-2.0.2-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="/build/dependancy/log4j-core-2.0.2.jar" sourcepath="/build/dependancy/sources/log4j-core-2.0.2-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="/build/dependancy/log4j-jcl-2.0.2.jar" sourcepath="/build/dependancy/sources/log4j-jcl-2.0.2-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="/build/dependancy/log4j-slf4j-impl-2.0.2.jar" sourcepath="/build/dependancy/sources/log4j-slf4j-impl-2.0.2-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="/build/dependancy/log4j-web-2.0.2.jar" sourcepath="/build/dependancy/sources/log4j-web-2.0.2-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="/build/dependancy/slf4j-api-1.7.19.jar" sourcepath="/build/dependancy/sources/slf4j-api-1.7.19-sources.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
