@@ -3,7 +3,7 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
 	<classpathentry exported="true" kind="lib" path="/build/dependancy/at.pkgs.logging-1.0.0.jar" sourcepath="/build/dependancy/sources/at.pkgs.logging-1.0.0-sources.jar"/>
-	<classpathentry exported="true" kind="lib" path="/build/dependancy/at.pkgs.logging.java-1.8.0-extension-1.0.0.jar" sourcepath="/build/dependancy/sources/at.pkgs.logging.java-1.8.0-extension-1.0.0-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="/build/dependancy/at.pkgs.logging.java8-1.0.0.jar" sourcepath="/build/dependancy/sources/at.pkgs.logging.java8-1.0.0-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="/build/dependancy/at.pkgs.logging.log4j-1.0.0.jar" sourcepath="/build/dependancy/sources/at.pkgs.logging.log4j-1.0.0-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="/build/dependancy/at.pkgs.sql.trifle-1.0.0.jar" sourcepath="/build/dependancy/sources/at.pkgs.sql.trifle-1.0.0-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="/build/dependancy/at.pkgs.template-1.0.0.jar" sourcepath="/build/dependancy/sources/at.pkgs.template-1.0.0-sources.jar"/>
@@ -19,5 +19,11 @@
 	<classpathentry exported="true" kind="lib" path="/build/dependancy/log4j-slf4j-impl-2.0.2.jar" sourcepath="/build/dependancy/sources/log4j-slf4j-impl-2.0.2-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="/build/dependancy/log4j-web-2.0.2.jar" sourcepath="/build/dependancy/sources/log4j-web-2.0.2-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="/build/dependancy/slf4j-api-1.7.19.jar" sourcepath="/build/dependancy/sources/slf4j-api-1.7.19-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="/build/dependancy/commons-dbcp2-2.1.1.jar" sourcepath="/build/dependancy/sources/commons-dbcp2-2.1.1-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="/build/dependancy/commons-pool2-2.4.2.jar" sourcepath="/build/dependancy/sources/commons-pool2-2.4.2-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="/build/dependancy/log4jdbc-log4j2-jdbc4.1-1.17-at-1504.jar" sourcepath="/build/dependancy/sources/log4jdbc-log4j2-jdbc4.1-1.17-at-1504-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="/build/dependancy/commons-configuration-1.10.jar" sourcepath="/build/dependancy/sources/commons-configuration-1.10-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="/build/dependancy/commons-lang-2.6.jar" sourcepath="/build/dependancy/sources/commons-lang-2.6-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="/build/dependancy.sample/h2-1.4.191.jar" sourcepath="/build/dependancy.sample/sources/h2-1.4.191-sources.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
