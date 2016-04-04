@@ -21,12 +21,26 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.ServiceLoader;
 import java.io.File;
-import at.pkgs.logging.Loggable;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletContextEvent;
 import at.pkgs.logging.Logger;
-import at.pkgs.logging.LoggerFactory;
 import at.pkgs.javastrap.core.utility.Lazy;
 
-public abstract class Core implements Loggable {
+public abstract class Core implements at.pkgs.logging.Loggable {
+
+	public static class ServletContextListener implements javax.servlet.ServletContextListener {
+
+		@Override
+		public void contextInitialized(ServletContextEvent event) {
+			Core.get().setServletContext(event.getServletContext());
+		}
+
+		@Override
+		public void contextDestroyed(ServletContextEvent event) {
+			// do nothing
+		}
+
+	}
 
 	private final Lazy<EnvironmentSettingSource> environmentSettingSource = new Lazy<EnvironmentSettingSource>() {
 
@@ -41,7 +55,7 @@ public abstract class Core implements Loggable {
 
 		@Override
 		protected File initialize() {
-			return new File(Core.this.getApplicationSetting("root_directory", "")).getAbsoluteFile();
+			return new File(Core.this.getSystemSetting("root_directory", "")).getAbsoluteFile();
 		}
 
 	};
@@ -50,10 +64,12 @@ public abstract class Core implements Loggable {
 
 		@Override
 		protected Logger initialize() {
-			return LoggerFactory.get(Core.this);
+			return at.pkgs.logging.LoggerFactory.get(Core.this);
 		}
 
 	};
+
+	private ServletContext servletContext;
 
 	protected abstract EnvironmentSettingSource configureEnvironmentSettingSource();
 
@@ -65,8 +81,8 @@ public abstract class Core implements Loggable {
 		return alternative;
 	}
 
-	public String getApplicationSetting(String name, String alternative) {
-		return this.getEnvironmentSetting(this.getApplicationName() + '.' + name, alternative);
+	public String getSystemSetting(String name, String alternative) {
+		return this.getEnvironmentSetting(this.getSystemName() + '.' + name, alternative);
 	}
 
 	public abstract String getSystemName();
@@ -104,6 +120,30 @@ public abstract class Core implements Loggable {
 
 	public Logger getLogger() {
 		return this.logger.get();
+	}
+
+	public ServletContext getServletContext() {
+		return this.servletContext;
+	}
+
+	private void setServletContext(ServletContext context) {
+		this.servletContext = context;
+	}
+
+	public void initialize() {
+		for (File file : this.getConfigulationFiles("log4j2", "xml")) {
+			at.pkgs.logging.log4j.LoadableConfigurationFactory.load(file);
+			this.information(
+					"logger configuration reloaded from: %s",
+					file);
+			break;
+		}
+		this.information(
+				"%s.%s initializing with %s",
+				this.getSystemName(),
+				this.getApplicationName(),
+				this.getRootDirectory());
+		// TODO
 	}
 
 	private static final Lazy<Core> instance = new Lazy<Core>() {

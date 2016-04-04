@@ -17,10 +17,6 @@
 
 package at.pkgs.javastrap.core;
 
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
-import javax.servlet.annotation.WebListener;
-
 public interface EnvironmentSettingSource {
 
 	public static class EnvironmentVariables implements EnvironmentSettingSource {
@@ -99,36 +95,43 @@ public interface EnvironmentSettingSource {
 
 		public static class Builder extends EnvironmentSettingSource.Builder {
 
-			public Builder(EnvironmentSettingSource.Builder previous) {
+			private final javax.servlet.ServletContext context;
+
+			public Builder(EnvironmentSettingSource.Builder previous, javax.servlet.ServletContext context) {
 				super(previous);
+				this.context = context;
 			}
 
 			@Override
 			protected EnvironmentSettingSource create(EnvironmentSettingSource defaults) {
-				return new ServletContext(defaults);
+				return new ServletContext(this.context, defaults);
 			}
 
 		}
 
+		private final javax.servlet.ServletContext context;
+
 		private final EnvironmentSettingSource defaults;
 
-		public ServletContext(EnvironmentSettingSource defaults) {
+		public ServletContext(javax.servlet.ServletContext context, EnvironmentSettingSource defaults) {
+			this.context = context;
 			this.defaults = defaults;
 		}
 
-		public ServletContext() {
-			this(null);
+		public ServletContext(javax.servlet.ServletContext context) {
+			this(context, null);
 		}
 
 		public String get(String name) {
 			String value;
 
-			value = ServletContext.context().getInitParameter(name);
+			value = this.context.getInitParameter(name);
 			if (value != null) return value;
 			if (this.defaults != null) return this.defaults.get(name);
 			return null;
 		}
 
+		/*
 		@WebListener
 		public static class Listener implements ServletContextListener {
 
@@ -166,6 +169,7 @@ public interface EnvironmentSettingSource {
 				}
 			}
 		}
+		 */
 
 	}
 
@@ -189,8 +193,8 @@ public interface EnvironmentSettingSource {
 			return new EnvironmentVariables.Builder(this);
 		}
 
-		public Builder fromServletContext() {
-			return new ServletContext.Builder(this);
+		public Builder fromServletContext(javax.servlet.ServletContext context) {
+			return new ServletContext.Builder(this, context);
 		}
 
 		protected EnvironmentSettingSource create(EnvironmentSettingSource defaults) {

@@ -8,7 +8,6 @@ public class Application extends Kernel {
 	@Override
 	protected EnvironmentSettingSource configureEnvironmentSettingSource() {
 		return EnvironmentSettingSource.configure()
-				.fromServletContext()
 				.fromSystemProperties()
 				.fromEnvironmentVariables()
 				.get();
@@ -21,6 +20,10 @@ public class Application extends Kernel {
 
 	public static Application get() {
 		return (Application)Kernel.get();
+	}
+
+	public static void main(String[] arguments) {
+		Application.get().initialize();
 	}
 
 }
