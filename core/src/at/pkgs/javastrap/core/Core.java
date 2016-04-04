@@ -24,11 +24,11 @@ import java.io.File;
 import at.pkgs.logging.Loggable;
 import at.pkgs.logging.Logger;
 import at.pkgs.logging.LoggerFactory;
-import at.pkgs.javastrap.core.utility.Singleton;
+import at.pkgs.javastrap.core.utility.Lazy;
 
 public abstract class Core implements Loggable {
 
-	private final Singleton<EnvironmentSettingSource> environmentSettingSource = new Singleton<EnvironmentSettingSource>() {
+	private final Lazy<EnvironmentSettingSource> environmentSettingSource = new Lazy<EnvironmentSettingSource>() {
 
 		@Override
 		protected EnvironmentSettingSource initialize() {
@@ -37,19 +37,16 @@ public abstract class Core implements Loggable {
 
 	};
 
-	private final Singleton<File> rootDirectory = new Singleton<File>() {
+	private final Lazy<File> rootDirectory = new Lazy<File>() {
 
 		@Override
 		protected File initialize() {
-			return new File(
-					Core.this.getEnvironmentSetting(
-							Core.this.getApplicationName() + ".root_directory",
-							"./"));
+			return new File(Core.this.getApplicationSetting("root_directory", "")).getAbsoluteFile();
 		}
 
 	};
 
-	private final Singleton<Logger> logger = new Singleton<Logger>() {
+	private final Lazy<Logger> logger = new Lazy<Logger>() {
 
 		@Override
 		protected Logger initialize() {
@@ -68,6 +65,10 @@ public abstract class Core implements Loggable {
 		return alternative;
 	}
 
+	public String getApplicationSetting(String name, String alternative) {
+		return this.getEnvironmentSetting(this.getApplicationName() + '.' + name, alternative);
+	}
+
 	public abstract String getSystemName();
 
 	public abstract String getApplicationName();
@@ -76,10 +77,14 @@ public abstract class Core implements Loggable {
 		return this.rootDirectory.get();
 	}
 
+	public File getConfigurationDirectory() {
+		return new File(this.getRootDirectory(), "config");
+	}
+
 	public File getConfigulationFile(String name) {
 		File file;
 
-		file = new File(this.getRootDirectory(), "config/" + name);
+		file = new File(this.getConfigurationDirectory(), name);
 		if (!file.exists() || !file.isFile()) return null;
 		if (!file.canRead()) return null;
 		return file;
@@ -101,7 +106,7 @@ public abstract class Core implements Loggable {
 		return this.logger.get();
 	}
 
-	private static final Singleton<Core> instance = new Singleton<Core>() {
+	private static final Lazy<Core> instance = new Lazy<Core>() {
 
 		@Override
 		protected Core initialize() {

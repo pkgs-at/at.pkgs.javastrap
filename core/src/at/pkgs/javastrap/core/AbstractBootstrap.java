@@ -23,13 +23,13 @@ import org.apache.commons.configuration.tree.OverrideCombiner;
 import at.pkgs.logging.Loggable;
 import at.pkgs.logging.Logger;
 import at.pkgs.logging.LoggerFactory;
-import at.pkgs.javastrap.core.utility.Singleton;
+import at.pkgs.javastrap.core.utility.Lazy;
 
 public class AbstractBootstrap implements Loggable {
 
 	private final String name;
 
-	private final Singleton<DefaultFileManager> files;
+	private final Lazy<DefaultFileManager> files;
 
 	private final Logger logger;
 
@@ -39,7 +39,7 @@ public class AbstractBootstrap implements Loggable {
 		OverrideCombiner combiner;
 
 		this.name = name;
-		this.files = new Singleton<DefaultFileManager>() {
+		this.files = new Lazy<DefaultFileManager>() {
 
 			@Override
 			protected DefaultFileManager initialize() {
