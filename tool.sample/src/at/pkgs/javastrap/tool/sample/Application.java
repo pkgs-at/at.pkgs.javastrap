@@ -18,12 +18,18 @@ public class Application extends Kernel {
 		return "tool.sample";
 	}
 
+	public int program(String... arguments) {
+		this.getDataSource();
+		return 0;
+	}
+
 	public static Application get() {
 		return (Application)Kernel.get();
 	}
 
 	public static void main(String[] arguments) {
 		Application.get().initialize();
+		System.exit(Application.get().program(arguments));
 	}
 
 }

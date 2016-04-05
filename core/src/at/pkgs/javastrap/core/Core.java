@@ -19,12 +19,23 @@ package at.pkgs.javastrap.core;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Properties;
 import java.util.ServiceLoader;
 import java.io.File;
+import java.net.MalformedURLException;
+import javax.sql.DataSource;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
+import org.apache.commons.configuration.Configuration;
+import org.apache.commons.configuration.CombinedConfiguration;
+import org.apache.commons.configuration.XMLConfiguration;
+import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.configuration.tree.OverrideCombiner;
+import org.apache.commons.dbcp2.BasicDataSourceFactory;
+import net.sf.log4jdbc.sql.jdbcapi.DataSourceSpy;
 import at.pkgs.logging.Logger;
 import at.pkgs.javastrap.core.utility.Lazy;
+import at.pkgs.javastrap.core.utility.Configurations;
 
 public abstract class Core implements at.pkgs.logging.Loggable {
 
@@ -65,6 +76,32 @@ public abstract class Core implements at.pkgs.logging.Loggable {
 		@Override
 		protected Logger initialize() {
 			return at.pkgs.logging.LoggerFactory.get(Core.this);
+		}
+
+	};
+
+	private final Lazy<CombinedConfiguration> configuration = new Lazy<CombinedConfiguration>() {
+
+		@Override
+		protected CombinedConfiguration initialize() {
+			OverrideCombiner combiner;
+			CombinedConfiguration configuration;
+
+			combiner = new OverrideCombiner();
+			configuration = new CombinedConfiguration(combiner);
+			for (File file : Core.this.getConfigulationFiles("system", "xml")) {
+				Core.this.debug("loading configuration from %s", file);
+				try {
+					configuration.addConfiguration(new XMLConfiguration(file.toURI().toURL()));
+				}
+				catch (ConfigurationException cause) {
+					throw new RuntimeException(String.format("configuration error: %s", file), cause);
+				}
+				catch (MalformedURLException cause) {
+					throw new RuntimeException(cause);
+				}
+			}
+			return configuration;
 		}
 
 	};
@@ -130,6 +167,55 @@ public abstract class Core implements at.pkgs.logging.Loggable {
 		this.servletContext = context;
 	}
 
+	protected CombinedConfiguration getConfiguration() {
+		return this.configuration.get();
+	}
+
+	public Configuration getConfiguration(String key) {
+		return this.getConfiguration().subset(key);
+	}
+
+	protected DataSource configureDataSource(String key, Properties defaults) {
+		Configuration configuration;
+		Properties properties;
+		StringBuilder connectionProperties;
+		DataSource source;
+
+		configuration = this.getConfiguration(key);
+		properties = (defaults == null) ? new Properties() : new Properties(defaults);
+		for (Configurations.Entry entry : Configurations.iterable(configuration)) {
+			if (entry.getKey().startsWith("[@")) continue;
+			if (entry.getKey().startsWith("connectionProperties.")) continue;
+			properties.setProperty(entry.getKey(), entry.getString());
+		}
+		connectionProperties = new StringBuilder();
+		for (Configurations.Entry entry : Configurations.iterable(configuration.subset("connectionProperties"))) {
+			connectionProperties.append(entry.getKey()).append('=');
+			connectionProperties.append(entry.getString()).append(';');
+		}
+		properties.setProperty("connectionProperties", connectionProperties.toString());
+		if (configuration.getBoolean("[@verbose]", false)) {
+			System.out.println(" * DataSource properties: " + key);
+			Configurations.dump(properties, System.out);
+		}
+		try {
+			source = BasicDataSourceFactory.createDataSource(properties);
+		}
+		catch (Exception cause) {
+			throw new RuntimeException(cause);
+		}
+		if (configuration.getBoolean("[@log4jdbc]", false)) {
+			return new DataSourceSpy(source);
+		}
+		else {
+			return source;
+		}
+	}
+
+	protected DataSource configureDataSource(String key) {
+		return this.configureDataSource(key, null);
+	}
+
 	public void initialize() {
 		for (File file : this.getConfigulationFiles("log4j2", "xml")) {
 			at.pkgs.logging.log4j.LoadableConfigurationFactory.load(file);
@@ -143,7 +229,10 @@ public abstract class Core implements at.pkgs.logging.Loggable {
 				this.getSystemName(),
 				this.getApplicationName(),
 				this.getRootDirectory());
-		// TODO
+		if (this.getConfiguration().getBoolean("[@verbose]", false)) {
+			System.out.println(" * configuration");
+			Configurations.dump(this.getConfiguration(), System.out);
+		}
 	}
 
 	private static final Lazy<Core> instance = new Lazy<Core>() {

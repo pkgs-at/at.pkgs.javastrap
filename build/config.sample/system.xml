@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<system verbose="false">
+	<dataSource verbose="false" log4jdbc="false">
+		<driverClassName>org.h2.Driver</driverClassName>
+		<defaultAutoCommit>true</defaultAutoCommit>
+		<defaultReadOnly>false</defaultReadOnly>
+		<defaultTransactionIsolation>READ_COMMITTED</defaultTransactionIsolation>
+		<initialSize>4</initialSize>
+		<maxTotal>-1</maxTotal>
+		<maxIdle>4</maxIdle>
+		<minIdle>1</minIdle>
+		<maxWaitMillis>5000</maxWaitMillis>
+		<validationQuery>SELECT ALL 1</validationQuery>
+		<connectionProperties>
+			<AUTO_RECONNECT>TRUE</AUTO_RECONNECT>
+			<AUTO_SERVER>TRUE</AUTO_SERVER>
+			<TRACE_LEVEL_FILE>4</TRACE_LEVEL_FILE>
+		</connectionProperties>
+	</dataSource>
+</system>

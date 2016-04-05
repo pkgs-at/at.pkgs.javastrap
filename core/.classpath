@@ -19,11 +19,13 @@
 	<classpathentry exported="true" kind="lib" path="/build/dependancy/log4j-slf4j-impl-2.0.2.jar" sourcepath="/build/dependancy/sources/log4j-slf4j-impl-2.0.2-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="/build/dependancy/log4j-web-2.0.2.jar" sourcepath="/build/dependancy/sources/log4j-web-2.0.2-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="/build/dependancy/slf4j-api-1.7.19.jar" sourcepath="/build/dependancy/sources/slf4j-api-1.7.19-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="/build/dependancy/commons-logging-1.2.jar" sourcepath="/build/dependancy/sources/commons-logging-1.2-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="/build/dependancy/commons-dbcp2-2.1.1.jar" sourcepath="/build/dependancy/sources/commons-dbcp2-2.1.1-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="/build/dependancy/commons-pool2-2.4.2.jar" sourcepath="/build/dependancy/sources/commons-pool2-2.4.2-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="/build/dependancy/log4jdbc-log4j2-jdbc4.1-1.17-at-1504.jar" sourcepath="/build/dependancy/sources/log4jdbc-log4j2-jdbc4.1-1.17-at-1504-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="/build/dependancy/commons-configuration-1.10.jar" sourcepath="/build/dependancy/sources/commons-configuration-1.10-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="/build/dependancy/commons-lang-2.6.jar" sourcepath="/build/dependancy/sources/commons-lang-2.6-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="/build/dependancy/commons-collections-3.2.2.jar" sourcepath="/build/dependancy/sources/commons-collections-3.2.2-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="/build/dependancy.sample/h2-1.4.191.jar" sourcepath="/build/dependancy.sample/sources/h2-1.4.191-sources.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
