@@ -50,6 +50,8 @@ public abstract class Kernel extends Core {
 	@Override
 	public void initialize() {
 		super.initialize();
+		System.out.println(this.getRootDirectory());
+		/*
 		try {
 			if (Database.VIA.countTableBySchema(null, "PUBLIC") <= 0)
 				Database.VIA.script(null, Kernel.class.getPackage().getName(), "data/0000.sql");
@@ -57,6 +59,7 @@ public abstract class Kernel extends Core {
 		catch (SQLException cause) {
 			throw new RuntimeException("failed on prepare database", cause);
 		}
+		 */
 	}
 
 	public static Kernel get() {
