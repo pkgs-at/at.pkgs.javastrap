@@ -27,5 +27,6 @@
 	<classpathentry exported="true" kind="lib" path="/build/dependancy/commons-lang-2.6.jar" sourcepath="/build/dependancy/sources/commons-lang-2.6-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="/build/dependancy/commons-collections-3.2.2.jar" sourcepath="/build/dependancy/sources/commons-collections-3.2.2-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="/build/dependancy.sample/h2-1.4.191.jar" sourcepath="/build/dependancy.sample/sources/h2-1.4.191-sources.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
