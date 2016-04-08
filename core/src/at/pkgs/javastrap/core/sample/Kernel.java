@@ -2,9 +2,11 @@ package at.pkgs.javastrap.core.sample;
 
 import java.util.Properties;
 import java.io.File;
+import java.sql.SQLException;
 import javax.sql.DataSource;
 import at.pkgs.javastrap.core.Core;
 import at.pkgs.javastrap.core.utility.Lazy;
+import at.pkgs.javastrap.core.sample.model.Database;
 
 public abstract class Kernel extends Core {
 
@@ -43,6 +45,18 @@ public abstract class Kernel extends Core {
 
 	public DataSource getDataSource() {
 		return this.dataSource.get();
+	}
+
+	@Override
+	public void initialize() {
+		super.initialize();
+		try {
+			if (Database.VIA.countTableBySchema(null, "PUBLIC") <= 0)
+				Database.VIA.script(null, Kernel.class.getPackage().getName(), "data/0000.sql");
+		}
+		catch (SQLException cause) {
+			throw new RuntimeException("failed on prepare database", cause);
+		}
 	}
 
 	public static Kernel get() {
