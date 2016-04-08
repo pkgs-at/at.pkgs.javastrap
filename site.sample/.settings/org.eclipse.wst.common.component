@@ -2,6 +2,8 @@
     <wb-module deploy-name="site.sample">
         <wb-resource deploy-path="/" source-path="/web" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
+        <wb-resource deploy-path="/WEB-INF/lib" source-path="../build/dependancy"/>
+        <wb-resource deploy-path="/WEB-INF/lib" source-path="../build/dependancy.sample"/>
         <property name="context-root" value="site.sample"/>
         <property name="java-output-path" value="/site.sample/build/classes"/>
     </wb-module>
