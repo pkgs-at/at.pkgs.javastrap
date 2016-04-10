@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ja-JP">
+  <head>
+[? head { ??]
+    <base href="[= $.request.contextPath =]/" />
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <title>[= title =] | at.pkgs.javastrap.site.sample</title>
+    <link rel="shortcut icon" href="~/image/base/favicon.ico" />
+    <link rel="stylesheet" href="~/style/bootstrap-3.3.6/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/style/base.css" />
+    <!--[if lt IE 9]>
+    <script src="~/script/html5shiv-3.7.3/html5shiv-printshiv.min.js"></script>
+    <script src="~/script/respond-1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <script src="~/script/sugar-1.4.1/sugar-1.4.1-full.min.js"></script>
+    <script src="~/script/json3-3.3.2/json3.min.js"></script>
+    <script src="~/script/at.pkgs-1.0.0/at.pkgs.js"></script>
+    <script src="~/script/jquery-1.12.3/jquery-1.12.3.min.js"></script>
+    <script src="~/script/jquery-at-0.9.0/jquery-at.js"></script>
+    <!--[if lt IE 8]>
+    <script src="~/script/at.pkgs.fixie-1.0.0/ltie8.js"></script>
+    <![endif]-->
+    <!--[if lt IE 9]>
+    <script src="~/script/at.pkgs.fixie-1.0.0/ltie9.js"></script>
+    <![endif]-->
+    <script src="~/style/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <style>
+[? head_style_content { ??]
+[? } head_style_content ??]
+    </style>
+[? } head ??]
+  </head>
+  <body>
+[? body { ??]
+    <div id="base_container" class="container">
+      <div id="base_header" class="col-xs-12">
+        <h1>at.pkgs.javastrap.site.sample</h1>
+        <h3>[= title =]</h3>
+      </div>
+      <div id="base_message" class="col-xs-12">
+[% if ($.hasMessage()) { %%]
+[% Java.from($.flashMessages()).each(function(message) {
+var suffix;
+
+switch (message.type.name()) {
+case 'ERROR' :
+	suffix = 'danger';
+	break;
+case 'WARNING' :
+	suffix = 'warning';
+	break;
+case 'NOTICE' :
+	suffix = 'info';
+	break;
+case 'SUCCESS' :
+	suffix = 'success';
+	break;
+} %%]
+        <div class="alert alert-[= suffix =]">
+          <p>[= message.text =]</p>
+        </div>
+[% }); %%]
+[% } %%]
+      </div>
+      <div id="base_main" class="col-xs-12">
+[? body_main { ??]
+[? } body_main ??]
+      </div>
+      <div id="base_footer" class="col-xs-12">
+        <address class="text-center">Copyright &copy; Architector Inc., Japan All Rights Reserved.</address>
+      </div>
+[% if ($.application.debug) with ({
+	session: $.request.getSession(false),
+}) { %%]
+[? body_debug { ??]
+      <div id="base_debug" class="col-xs-12">
+        <div class="panel panel-danger">
+          <div class="panel-heading">INSERVLET DEBUGGER ENABLED</div>
+          <div class="panel-body">
+            <dl class="dl-horizontal" style="margin:0px;">
+              <dt>handler</dt>
+              <dd>[= $.class =]</dd>
+[% with ({ names: $.request.parameterNames, name: null }) { %%]
+[% while (names.hasMoreElements()) { name = names.nextElement(); %%]
+              <dt>request: [= name =]</dt>
+              <dd>[= $.request.getParameter(name) =]</dd>
+[% } %%]
+[% } %%]
+[% if (session) { %%]
+              <dt>session_id</dt>
+              <dd>[= session.id =]</dd>
+[% with ({ names: session.attributeNames, name: null }) { %%]
+[% while (names.hasMoreElements()) { name = names.nextElement(); %%]
+              <dt>session: [= name =]</dt>
+              <dd>[= session.getAttribute(name) =]</dd>
+[% } %%]
+[% } %%]
+[% } else { %%]
+              <dt>session_id</dt>
+              <dd>null</dd>
+[% } %%]
+            </dl>
+          </div>
+        </div>
+      </div>
+[? } body_debug ??]
+[% } %%]
+    </div>
+[? } body ??]
+  </body>
+</html>
