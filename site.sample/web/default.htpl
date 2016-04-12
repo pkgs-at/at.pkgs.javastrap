@@ -5,5 +5,12 @@
 [? extends ~/template/base.htpl ??]
 [? body_main { ??]
 [? base ??]
+<a href="register.htpl">新規登録</a>
+<h4>Employee一覧</h4>
+[% if (employees.size() <= 0) { %%]
+<p>現在登録されているEmployeeはありません。</p>
+[% } else { %%]
+<p>list</p>
+[% } %%]
 [? } body_main ??]
 [% } %%]

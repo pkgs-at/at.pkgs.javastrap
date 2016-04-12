@@ -84,7 +84,7 @@ case 'SUCCESS' :
               <dd>[= $.class =]</dd>
 [% with ({ names: $.request.parameterNames, name: null }) { %%]
 [% while (names.hasMoreElements()) { name = names.nextElement(); %%]
-              <dt>request: [= name =]</dt>
+              <dt>(request) [= name =]</dt>
               <dd>[= $.request.getParameter(name) =]</dd>
 [% } %%]
 [% } %%]

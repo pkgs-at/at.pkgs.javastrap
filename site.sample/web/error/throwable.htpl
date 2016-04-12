@@ -1,0 +1,41 @@
+[% /* <meta charset="UTF-8" /> */ %%]
+[% with ({
+	debug: $.application.debug,
+	title: 'システムエラー',
+}) { %%]
+[? extends ~/template/base.htpl ??]
+[? body_main { ??]
+[? base ??]
+<div class="alert alert-danger">
+  <p>
+    システムエラーが発生しました。
+[% if (!debug) { %%]
+    &nbsp;
+    <a class="btn btn-default btn-xs" data-toggle="collapse" href="#detail" style="margin-top:-4px;margin-bottom:-2px;">詳細表示</a>
+[% } %%]
+  </p>
+</div>
+<div class="collapse[= debug ? ' in' : '' =]" id="detail">
+[% with({
+	buffer: undefined,
+	out: undefined,
+	cause: undefined,
+}) {
+	buffer = new java.io.StringWriter();
+	out = new java.io.PrintWriter(buffer);
+	out.print($.request.requestURL);
+	if ($.request.queryString) {
+		out.print('?');
+		out.print($.request.queryString);
+	}
+	out.println();
+	out.println();
+	cause = $.request.getAttribute('javax.servlet.error.exception');
+	cause.printStackTrace(out);
+	out.flush();
+%%]
+  <pre>[= buffer =]</pre>
+[% } %%]
+</div>
+[? } body_main ??]
+[% } %%]

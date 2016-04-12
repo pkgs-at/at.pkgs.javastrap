@@ -1,0 +1,12 @@
+[% /* <meta charset="UTF-8" /> */ %%]
+[% with ({
+	title: 'Not Found',
+}) { %%]
+[? extends ~/template/base.htpl ??]
+[? body_main { ??]
+[? base ??]
+<div class="alert alert-info">
+  <p>このページは削除されたか見つかりません。</p>
+</div>
+[? } body_main ??]
+[% } %%]

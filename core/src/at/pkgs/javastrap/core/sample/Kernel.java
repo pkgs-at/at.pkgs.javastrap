@@ -44,8 +44,7 @@ public abstract class Kernel extends Core {
 	}
 
 	public boolean isDebug() {
-		// TODO
-		return true;
+		return this.getConfiguration().getBoolean("[@debug]");
 	}
 
 	public DataSource getDataSource() {

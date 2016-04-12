@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<system verbose="false">
+<system verbose="false" debug="false">
 	<dataSource verbose="false" log4jdbc="false">
 		<driverClassName>org.h2.Driver</driverClassName>
 		<defaultAutoCommit>true</defaultAutoCommit>

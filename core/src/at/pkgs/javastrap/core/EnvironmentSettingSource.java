@@ -131,46 +131,6 @@ public interface EnvironmentSettingSource {
 			return null;
 		}
 
-		/*
-		@WebListener
-		public static class Listener implements ServletContextListener {
-
-			@Override
-			public void contextInitialized(ServletContextEvent event) {
-				ServletContext.setup(event.getServletContext());
-			}
-
-			@Override
-			public void contextDestroyed(ServletContextEvent event) {
-				// do nothing
-			}
-
-		}
-
-		private static javax.servlet.ServletContext context;
-
-		protected static javax.servlet.ServletContext context() {
-			if (ServletContext.context == null) {
-				synchronized (ServletContext.class) {
-					if (ServletContext.context == null)
-						throw new IllegalStateException("ServletContext is not initialized");
-				}
-			}
-			return ServletContext.context;
-		}
-
-		protected static void setup(javax.servlet.ServletContext context) {
-			if (context == null)
-				throw new NullPointerException("ServletContext is null");
-			if (ServletContext.context == null) {
-				synchronized (ServletContext.class) {
-					if (ServletContext.context == null)
-						ServletContext.context = context;
-				}
-			}
-		}
-		 */
-
 	}
 
 	public class Builder {
