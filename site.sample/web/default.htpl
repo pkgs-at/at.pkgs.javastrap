@@ -5,12 +5,33 @@
 [? extends ~/template/base.htpl ??]
 [? body_main { ??]
 [? base ??]
-<a href="register.htpl">新規登録</a>
+<a href="register.htpl" class="btn btn-default">新規登録</a>
 <h4>Employee一覧</h4>
 [% if (employees.size() <= 0) { %%]
 <p>現在登録されているEmployeeはありません。</p>
 [% } else { %%]
-<p>list</p>
+<table class="table table-bordered table-hover table-condensed">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Family Name</th>
+      <th>Given Name</th>
+      <th>Mail Address</th>
+      <th>Telephone Number</th>
+    </tr>
+  </thead>
+  <tbody>
+[% Java.from(employees).each(function(employee) { %%]
+    <tr>
+      <td class="text-right"><a href="detail.htpl?employee_id=[= employee.employeeId =]">[= employee.employeeId =]</a></td>
+      <td>[= employee.familyName =]</td>
+      <td>[= employee.givenName =]</td>
+      <td>[= employee.mailAddress =]</td>
+      <td>[= employee.telephoneNumber =]</td>
+    </tr>
+[% }); %%]
+  </tbody>
+</table>
 [% } %%]
 [? } body_main ??]
 [% } %%]

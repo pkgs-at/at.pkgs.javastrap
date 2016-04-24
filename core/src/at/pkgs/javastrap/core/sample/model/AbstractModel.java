@@ -12,8 +12,12 @@ public class AbstractModel<ColumnType extends AbstractModel.Column> extends Mode
 
 		public String name();
 
+		public default String column() {
+			return this.name().toLowerCase();
+		}
+
 		public default void expression(Query query) {
-			query.identifier(this.name().toLowerCase());
+			query.identifier(this.column());
 		}
 
 	}

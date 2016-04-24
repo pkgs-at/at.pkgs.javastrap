@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import javax.sql.DataSource;
 import at.pkgs.javastrap.core.Core;
 import at.pkgs.javastrap.core.utility.Lazy;
+import at.pkgs.javastrap.core.utility.PropertiesSource;
 import at.pkgs.javastrap.core.sample.model.Database;
 
 public abstract class Kernel extends Core {
@@ -52,11 +53,18 @@ public abstract class Kernel extends Core {
 	}
 
 	@Override
+	protected PropertiesSource configureMessagePropertiesSource() {
+		return new PropertiesSource.Resource(Kernel.class.getResource("message.properties"))
+				.scope(Kernel.class.getPackage())
+				.chain(super.configureMessagePropertiesSource());
+	}
+
+	@Override
 	public void initialize() {
 		super.initialize();
 		try {
-			if (Database.VIA.countTableBySchema(null, "PUBLIC") <= 0)
-				Database.VIA.script(null, Kernel.class.getPackage().getName(), "data/0000.sql");
+			if (Database.VIA.countTableBySchema("PUBLIC") <= 0)
+				Database.VIA.script(Kernel.class.getPackage().getName(), "data/0000.sql");
 		}
 		catch (SQLException cause) {
 			throw new RuntimeException("failed on prepare database", cause);

@@ -69,6 +69,14 @@ public abstract class Lazy<Type> {
 
 	}
 
+	public static abstract class Purgeable<Type> extends Lazy<Type> {
+
+		public void purge() {
+			this.reset();
+		}
+
+	}
+
 	private State state;
 
 	public Lazy() {
@@ -98,6 +106,12 @@ public abstract class Lazy<Type> {
 			}
 		}
 		return this.state.getInstance();
+	}
+
+	protected void reset() {
+		synchronized (this) {
+			this.state = new State(Status.POSTPONED);
+		}
 	}
 
 }

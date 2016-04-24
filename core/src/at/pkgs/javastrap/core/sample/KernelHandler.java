@@ -4,7 +4,6 @@ import java.util.UUID;
 import java.io.Serializable;
 import java.io.IOException;
 import javax.servlet.http.HttpSession;
-import at.pkgs.web.http.HttpResponse;
 import at.pkgs.javastrap.core.CoreHandler;
 
 public abstract class KernelHandler extends CoreHandler {
@@ -47,15 +46,12 @@ public abstract class KernelHandler extends CoreHandler {
 		return 15000L;
 	}
 
-	protected void token() throws IOException {
+	protected void token() throws IOException, ErrorResponse {
 		Token token;
 		HttpSession session;
 
-		if (!this.getRequest().methodIs("POST")) {
-			this.getResponse().sendError(HttpResponse.SC_BAD_REQUEST);
-			this.finish();
-			return;
-		}
+		if (this.noneOf(HttpMethod.POST))
+			throw new ErrorResponse(ClientError.MethodNotAllowed);
 		token = new Token(this.getTokenPeriod());
 		session = this.getRequest().getSession(true);
 		session.setAttribute(this.getTokenSessionName(), token);

@@ -19,6 +19,7 @@ package at.pkgs.javastrap.core;
 
 import java.io.IOException;
 import javax.servlet.ServletException;
+import at.pkgs.template.Template;
 import at.pkgs.web.http.HttpRequest;
 import at.pkgs.web.http.HttpResponse;
 import at.pkgs.web.trio.AbstractServlet;
@@ -26,6 +27,11 @@ import at.pkgs.web.trio.AbstractServlet;
 public class CoreServlet extends AbstractServlet implements CoreHolder {
 
 	private static final long serialVersionUID = 1L;
+
+	@Override
+	protected Template getTemplate(String path) throws IOException {
+		return Core.get().getTemplate(path);
+	}
 
 	@Override
 	protected CoreHandler newDefaultHandler(

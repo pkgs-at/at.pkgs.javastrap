@@ -7,8 +7,8 @@
 	<classpathentry exported="true" kind="lib" path="/build/dependancy/at.pkgs.logging.log4j-1.0.0.jar" sourcepath="/build/dependancy/sources/at.pkgs.logging.log4j-1.0.0-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="/build/dependancy/at.pkgs.sql.trifle-1.0.0.jar" sourcepath="/build/dependancy/sources/at.pkgs.sql.trifle-1.0.0-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="/build/dependancy/at.pkgs.template-1.0.0.jar" sourcepath="/build/dependancy/sources/at.pkgs.template-1.0.0-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="/build/dependancy/at.pkgs.web.client-1.0.0.jar" sourcepath="/build/dependancy/sources/at.pkgs.web.client-1.0.0-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="/build/dependancy/at.pkgs.web.http-1.0.0.jar" sourcepath="/build/dependancy/sources/at.pkgs.web.http-1.0.0-sources.jar"/>
-	<classpathentry exported="true" kind="lib" path="/build/dependancy/at.pkgs.web.page-1.0.0.jar" sourcepath="/build/dependancy/sources/at.pkgs.web.page-1.0.0-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="/build/dependancy/at.pkgs.web.trio-1.0.0.jar" sourcepath="/build/dependancy/sources/at.pkgs.web.trio-1.0.0-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="/build/dependancy/javax.servlet-api-3.0.1.jar" sourcepath="/build/dependancy/sources/javax.servlet-api-3.0.1-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="/build/dependancy/jul-to-slf4j-1.7.19.jar" sourcepath="/build/dependancy/sources/jul-to-slf4j-1.7.19-sources.jar"/>

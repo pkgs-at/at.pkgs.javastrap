@@ -2,6 +2,7 @@ package at.pkgs.javastrap.core.sample.model;
 
 import java.sql.Timestamp;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import at.pkgs.sql.trifle.Query;
@@ -40,16 +41,34 @@ public class Employee extends AbstractModel<Employee.Column> implements Employee
 			query.append(Via.TABLE);
 		}
 
+		public Employee retrieveByEmployeeId(
+				Connection connection,
+				long employeeId)
+						throws SQLException {
+			return this.retrieveOne(
+					connection,
+					new Query.Equal(
+							Column.EMPLOYEE_ID,
+							employeeId));
+		}
+
+		public Employee retrieveByEmployeeId(
+				long employeeId)
+						throws SQLException {
+			return this.retrieveByEmployeeId(null, employeeId);
+		}
+
 		public long create(
 				Connection connection,
 				EmployeeContent content)
 						throws SQLException {
 			try (Connecter connecter = this.connecter(connection)) {
 				Timestamp now;
+				PreparedStatement statement;
 				ResultSet result;
 
 				now = this.getDatabase().getCurrentTimestamp(connecter.get());
-				result = this.query()
+				statement = this.query()
 						.append("INSERT INTO ", Via.TABLE)
 						.clause(
 								'(', ", ", ')', null,
@@ -67,12 +86,20 @@ public class Employee extends AbstractModel<Employee.Column> implements Employee
 								Query.valueOf(content.getTelephoneNumber()),
 								Query.valueOf(now),
 								Query.valueOf(now))
-						.append(" RETURNING ", Column.EMPLOYEE_ID)
-						.prepare(connecter.get())
-						.executeQuery();
+						.prepare(
+								connecter.get(),
+								PreparedStatement.RETURN_GENERATED_KEYS);
+				statement.executeUpdate();
+				result = statement.getGeneratedKeys();
 				if (!result.next()) throw new RuntimeException("cannot fetch result");
 				return result.getLong(1);
 			}
+		}
+
+		public long create(
+				EmployeeContent content)
+						throws SQLException {
+			return this.create(null, content);
 		}
 
 		public int update(
@@ -116,6 +143,13 @@ public class Employee extends AbstractModel<Employee.Column> implements Employee
 						.prepare(connecter.get())
 						.executeUpdate();
 			}
+		}
+
+		public int update(
+				long employeeId,
+				EmployeeContent content)
+						throws SQLException {
+			return this.update(null, employeeId, content);
 		}
 
 	}

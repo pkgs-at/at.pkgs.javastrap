@@ -1,14 +1,19 @@
 package at.pkgs.javastrap.site.sample;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.InvocationTargetException;
 import java.io.IOException;
+import javax.servlet.ServletException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import at.pkgs.web.client.LocationBuilder;
 import at.pkgs.javastrap.core.utility.Lazy;
 import at.pkgs.javastrap.core.sample.KernelHandler;
 
 public abstract class ApplicationHandler extends KernelHandler {
+
+	public static final String MESSAGE_INVALID_TOKEN = "handlerInvalidToken";
 
 	private static final Lazy<ObjectMapper> objectMapper  = new Lazy<ObjectMapper>() {
 
@@ -23,6 +28,8 @@ public abstract class ApplicationHandler extends KernelHandler {
 
 	};
 
+	private LocationFactory locationFactory = null;
+
 	public Application getApplication() {
 		return Application.get();
 	}
@@ -30,6 +37,15 @@ public abstract class ApplicationHandler extends KernelHandler {
 	@Override
 	public ApplicationHolder getHolder() {
 		return (ApplicationHolder)super.getHolder();
+	}
+
+	public LocationBuilder location() {
+		if (this.locationFactory == null)
+			this.locationFactory = new LocationFactory(
+					this.getApplication()
+							.getApplicationConfiguration()
+							.getString("location", null));
+		return this.locationFactory.get();
 	}
 
 	protected String encode(Object data) {
@@ -55,7 +71,8 @@ public abstract class ApplicationHandler extends KernelHandler {
 
 	@SuppressWarnings("unchecked")
 	protected <ActionType extends Enum<?>> ActionType dispatch(
-			ActionType defaultAction) {
+			ActionType defaultAction)
+					throws ErrorResponse {
 		String action;
 
 		action = this.getRequest().getParameter("action");
@@ -66,9 +83,23 @@ public abstract class ApplicationHandler extends KernelHandler {
 			method = defaultAction.getClass().getMethod("valueOf", String.class);
 			return (ActionType)method.invoke(null, action.toUpperCase());
 		}
-		catch (java.lang.ReflectiveOperationException cause) {
+		catch (InvocationTargetException cause) {
+			if (cause.getCause() instanceof IllegalArgumentException)
+				throw new ErrorResponse(ClientError.BadRequest);
+			else
+				throw new RuntimeException(cause);
+		}
+		catch (ReflectiveOperationException cause) {
 			throw new RuntimeException(cause);
 		}
+	}
+
+	@Override
+	protected void handle(ErrorResponse error) throws ServletException, IOException {
+		this.setResponseStatus(error.getStatus());
+		if (error.getCode() != null)
+			this.addErrorMessage(error.getCode(), error.getArguments());
+		this.forward("/error/message.htpl");
 	}
 
 }

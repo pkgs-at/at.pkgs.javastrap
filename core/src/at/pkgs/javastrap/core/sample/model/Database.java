@@ -85,6 +85,12 @@ public class Database extends AbstractDatabase {
 	}
 
 	public void script(
+			String location)
+					throws SQLException {
+		this.script((Connection)null, location);
+	}
+
+	public void script(
 			Connection connection,
 			String namespace,
 			String file)
@@ -96,6 +102,13 @@ public class Database extends AbstractDatabase {
 		location.append('/');
 		location.append(file);
 		this.script(connection, location.toString());
+	}
+
+	public void script(
+			String namespace,
+			String file)
+					throws SQLException {
+		this.script(null, namespace, file);
 	}
 
 	public int countTableBySchema(
@@ -116,6 +129,12 @@ public class Database extends AbstractDatabase {
 		}
 	}
 
+	public int countTableBySchema(
+			String schema)
+					throws SQLException {
+		return this.countTableBySchema(null, schema);
+	}
+
 	public Timestamp getCurrentTimestamp(
 			Connection connection)
 					throws SQLException {
@@ -129,6 +148,10 @@ public class Database extends AbstractDatabase {
 			if (!result.next()) throw new RuntimeException("cannot fetch result");;
 			return result.getTimestamp(1);
 		}
+	}
+
+	public Timestamp getCurrentTimestamp() throws SQLException {
+		return this.getCurrentTimestamp(null);
 	}
 
 	public static final Database VIA = new Database();

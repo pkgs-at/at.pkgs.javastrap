@@ -1,9 +1,9 @@
 package at.pkgs.javastrap.site.sample.handler;
 
-import java.io.IOException;
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebFilter;
+import at.pkgs.javastrap.core.sample.model.Employee;
 import at.pkgs.javastrap.site.sample.ApplicationHandler;
+import at.pkgs.javastrap.site.sample.model.EmployeeForm;
 
 public class RegisterHandler extends ApplicationHandler {
 
@@ -24,18 +24,29 @@ public class RegisterHandler extends ApplicationHandler {
 
 	}
 
-	protected void input() throws ServletException, IOException {
-		// TODO
+	protected void input() throws Exception {
+		// do nothing
 	}
 
-	protected void submit() throws ServletException, IOException {
-		// TODO
-		this.getResponse().sendRedirect("/");
-		this.finish();
+	protected void submit() throws Exception {
+		EmployeeForm form;
+
+		if (this.noneOf(HttpMethod.POST))
+			throw new ErrorResponse(
+					ClientError.MethodNotAllowed);
+		if (!this.validateToken("token"))
+			throw new ErrorResponse(
+					ClientError.BadRequest,
+					RegisterHandler.MESSAGE_INVALID_TOKEN);
+		form = this.decode(
+				this.getRequest().getParameter("data"),
+				EmployeeForm.class);
+		Employee.VIA.create(form);
+		this.redirect(this.location().path("/default.htpl"));
 	}
 
 	@Override
-	protected void handle() throws ServletException, IOException {
+	protected void handle() throws Exception {
 		switch (this.dispatch(Action.INPUT)) {
 		case TOKEN :
 			this.token();

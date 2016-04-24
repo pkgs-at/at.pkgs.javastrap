@@ -1,0 +1,9 @@
+[% /* <meta charset="UTF-8" /> */ %%]
+[% with ({
+	title: 'エラー',
+}) { %%]
+[? extends ~/template/base.htpl ??]
+[? body_main { ??]
+[? base ??]
+[? } body_main ??]
+[% } %%]

@@ -19,10 +19,14 @@ package at.pkgs.javastrap.core;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Properties;
 import java.util.ServiceLoader;
-import java.io.File;
+import java.text.Format;
+import java.net.URL;
 import java.net.MalformedURLException;
+import java.io.File;
+import java.io.IOException;
 import javax.sql.DataSource;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
@@ -34,8 +38,14 @@ import org.apache.commons.configuration.tree.OverrideCombiner;
 import org.apache.commons.dbcp2.BasicDataSourceFactory;
 import net.sf.log4jdbc.sql.jdbcapi.DataSourceSpy;
 import at.pkgs.logging.Logger;
+import at.pkgs.template.ResourceProvider;
+import at.pkgs.template.ResourceProviderResolver;
+import at.pkgs.template.TemplateFactory;
+import at.pkgs.template.Template;
 import at.pkgs.javastrap.core.utility.Lazy;
 import at.pkgs.javastrap.core.utility.Configurations;
+import at.pkgs.javastrap.core.utility.PropertiesSource;
+import at.pkgs.javastrap.core.utility.MessageSource;
 
 public abstract class Core implements at.pkgs.logging.Loggable {
 
@@ -52,6 +62,26 @@ public abstract class Core implements at.pkgs.logging.Loggable {
 		}
 
 	}
+
+	private final Lazy<List<Class<?>>> hierarchie = new Lazy<List<Class<?>>>() {
+
+		@Override
+		protected List<Class<?>> initialize() {
+			List<Class<?>> list;
+			Class<?> core;
+			Class<?> type;
+
+			list = new ArrayList<Class<?>>();
+			core = Core.class;
+			type = Core.this.getClass();
+			while (!core.equals(type)) {
+				list.add(type);
+				type = type.getSuperclass();
+			}
+			list.add(core);
+			return Collections.unmodifiableList(list);
+		}
+	};
 
 	private final Lazy<EnvironmentSettingSource> environmentSettingSource = new Lazy<EnvironmentSettingSource>() {
 
@@ -106,7 +136,34 @@ public abstract class Core implements at.pkgs.logging.Loggable {
 
 	};
 
+	private final Lazy<MessageSource> messages = new Lazy.Purgeable<MessageSource>() {
+
+		@Override
+		protected MessageSource initialize() {
+			return new MessageSource(Core.this.configureMessagePropertiesSource());
+		}
+
+	};
+
+	private final Lazy<TemplateFactory> templates = new Lazy.Purgeable<TemplateFactory>() {
+
+		@Override
+		protected TemplateFactory initialize() {
+			try {
+				return Core.this.createTemplateFactory();
+			}
+			catch (IOException cause) {
+				throw new RuntimeException(cause);
+			}
+		}
+
+	};
+
 	private ServletContext servletContext;
+
+	protected List<Class<?>> getHierarchie() {
+		return this.hierarchie.get();
+	}
 
 	protected abstract EnvironmentSettingSource configureEnvironmentSettingSource();
 
@@ -173,6 +230,52 @@ public abstract class Core implements at.pkgs.logging.Loggable {
 
 	public Configuration getConfiguration(String key) {
 		return this.getConfiguration().subset(key);
+	}
+
+	protected PropertiesSource configureMessagePropertiesSource() {
+		return new PropertiesSource.Resource(Core.class.getResource("message.properties"))
+				.scope(Core.class.getPackage());
+	}
+
+	public void purgeMessageSource() {
+		((Lazy.Purgeable<?>)this.messages).purge();
+	}
+
+	public MessageSource getMessageSource() {
+		return this.messages.get();
+	}
+
+	public String format(String code, Object... arguments) {
+		for (Class<?> scope : this.getHierarchie()) {
+			Format format;
+
+			format = this.getMessageSource().getFormat(scope.getPackage().getName() + '.' + code);
+			if (format != null) return format.format(arguments);
+		}
+		throw new IllegalArgumentException("no message for: " + code);
+	}
+
+	protected ResourceProvider configureTemplateResourceProvider() {
+		return new ResourceProvider() {
+
+			@Override
+			public URL getResource(String path) {
+				return null;
+			}
+
+		};
+	}
+
+	protected TemplateFactory createTemplateFactory() throws IOException {
+		return new TemplateFactory(new ResourceProviderResolver(this.configureTemplateResourceProvider()));
+	}
+
+	public void purgeTemplateFactory() {
+		((Lazy.Purgeable<?>)this.templates).purge();
+	}
+
+	public Template getTemplate(String path) throws IOException {
+		return this.templates.get().getTemplate(path);
 	}
 
 	protected DataSource configureDataSource(String key, Properties defaults) {
